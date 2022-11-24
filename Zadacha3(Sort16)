@@ -1,0 +1,55 @@
+#include "pt4.h"
+#include "fstream"
+#include "string"
+#include <algorithm>
+using namespace std;
+
+int checkNumber(int* mas, int size, int x) {
+    bool flag = false;
+    int l = 0; // левая граница
+    int r = size - 1; // правая граница
+    int mid;
+    while ((l <= r) && (flag != true)) {
+        mid = (l + r) / 2; // считываем срединный индекс отрезка [l,r]
+        if (mas[mid] == x) flag = true; //проверяем ключ со серединным элементом
+        if (mas[mid] > x) r = mid - 1; // проверяем, какую часть нужно отбросить
+        else l = mid + 1;
+    }
+    if (flag) return mid;
+    else return 1000;
+}
+
+void Solve()
+{
+    Task("Sort16");
+    string filename;
+    pt >> filename;
+    ifstream f(filename);
+    int x;
+    pt >> x;
+    int size = 200;
+    int* mas;
+    mas = new int[size];
+    int j = 0;
+    while (!f.eof()) {
+        f >> mas[j];
+        j++;
+    }
+    int answer = 0;
+    size = j + 1;
+    sort(mas, mas + size);
+    for (int i = 0; i < size; i++) {
+        int sup = 0;
+        sup = checkNumber(mas, size, x);
+        if (sup != 1000) {
+            answer++;
+            for (int j = sup; j < size; j++)
+            {
+                mas[j] = mas[j + 1];
+            }
+            --size;
+        }
+        sup = 1000;
+    }
+    pt << answer;
+}

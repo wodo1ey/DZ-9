@@ -1,0 +1,36 @@
+#include "pt4.h"
+#include "fstream"
+#include "string"
+using namespace std;
+
+void Solve()
+{
+    Task("Sort10");
+    int n;
+    int num = 1;
+    pt >> n;
+    int* mas;
+    mas = new int[n];
+    for (int i = 0; i < n; i++) pt >> mas[i];
+    string filename;
+    pt >> filename;
+    ofstream file(filename);
+    int j, r;
+    for (int i = 1; i < n; i++) {
+        r = mas[i];
+        j = i - 1;
+        while (j >= 0 && mas[j] > r) {
+            mas[j + 1] = mas[j]; 
+            j--;
+        }
+        mas[j + 1] = r; 
+        for (int i = 0; i < n; i++) {
+            file << mas[i] << ' ';
+            if (i == num) {
+                file << '|' << ' ';
+            }
+        }
+        num++;
+        file << endl;
+    }
+}

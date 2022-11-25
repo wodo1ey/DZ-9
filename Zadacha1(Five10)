@@ -1,0 +1,98 @@
+#include "pt4.h"
+#include "string"
+#include "fstream"
+#include "iostream"
+using namespace std;
+
+string firstNumber(string str) {
+    string first;
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] != '(') first += str[i];
+        else i = str.size();
+    }
+    return first;
+}
+
+string secondNumber(string str) {
+    string second;
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] == '=') {
+            for (int j = (i + 1); j < str.size(); j++) {
+                if (str[j] != '(') second += str[j];
+                else j = str.size(), i = str.size();
+            }
+        }
+    }
+    return second;
+}
+
+string baseFinder(string str) {
+    string base;
+    for (int i = (str.size() - 2); i > 0; i--) {
+        if (str[i] != '(') base += str[i];
+        else i = 0;
+    }
+    if (base.size() < 2) return base;
+    else {
+        string base2;
+        base2 += base[1];
+        base2 += base[0];
+        return base2;
+    }
+}
+
+string reverse(string const& s)
+{
+    string rev;
+    for (int i = s.size() - 1; i >= 0; i--) {
+        rev = rev.append(1, s[i]);
+    };
+    return rev;
+}
+
+string baseChanger(int num, int base) {
+    int sup = 0;
+    string answer;
+    while (num > 0) {
+        sup = num % base;
+        num /= base;
+        switch (sup) {
+        case 0: answer += '0'; break;
+        case 1: answer += '1'; break;
+        case 2: answer += '2'; break;
+        case 3: answer += '3'; break;
+        case 4: answer += '4'; break;
+        case 5: answer += '5'; break;
+        case 6: answer += '6'; break;
+        case 7: answer += '7'; break;
+        case 8: answer += '8'; break;
+        case 9: answer += '9'; break;
+        case 10: answer += 'A'; break;
+        case 11: answer += 'B'; break;
+        case 12: answer += 'C'; break;
+        case 13: answer += 'D'; break;
+        case 14: answer += 'E'; break;
+        case 15: answer += 'F'; break;
+        }
+    }
+    answer = reverse(answer);
+    return answer;
+}
+
+void Solve()
+{
+    Task("Five10");
+    string fn1, fn2;
+    pt >> fn1 >> fn2;
+    ifstream file1(fn1);
+    ofstream file2(fn2);
+    string str;
+    while (getline(file1, str))
+    {
+        int first = stoi(firstNumber(str));
+        int base = stoi(baseFinder(str));
+        string answer = baseChanger(first, base);
+        if (answer == secondNumber(str)) str += ' ', str += '+';
+        file2 << str << endl;
+    }
+}
